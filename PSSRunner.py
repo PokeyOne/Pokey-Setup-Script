@@ -89,8 +89,17 @@ def run(path: str, workspace: str):
                 print('[ERROR]: UNKNOWN COMMAND! [Line: {0}]: "{1}"'.format(lineIndex, string_from_array(words)))
         lineIndex += 1
 
+def runNoArg():
+    print("Welcome to the Pokey Setup Script Interpreter!")
+    print("For easier access to the interpreter, use the command line entry. See github page for details.")
+    print("Anyway, where is your setup script located?")
+    pssFileLocation = input("")
+    print("Now, what might the workspace location be?")
+    workspaceLocation = input("")
+    run(pssFileLocation, workspaceLocation)
+
 
 if len(sys.argv) > 2:
     run(sys.argv[1], sys.argv[2])
 else:
-    run("/Volumes/PKYDRV/PSSFiles/defaultWebsite.pss", "/Volumes/PKYDRV/PSSFiles/")
+    runNoArg()
