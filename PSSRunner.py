@@ -22,6 +22,23 @@ def string_from_array(array, suffix=""):
     return result
 
 
+def is_comment(string):
+    """
+    Find out if line is a comment or line of code
+    :param string: line to analyze
+    :return: True if line is a comment
+    """
+    chars = list(string)
+
+    if len(chars) <= 0:
+        return True
+
+    if chars[0] == "#":
+        return True
+    else:
+        return False
+
+
 def remove_escapes(string):
     """
     removes escapes(e.g. \n and \t) from string given
@@ -58,38 +75,43 @@ def run(path: str, workspace: str):
     lines = file_content.split("\n")
     lineIndex = 0
     for line in lines:
-        words = line.split(" ")
-        if len(words) > 0:
-            command = words[0]
-            if command == "print":
-                index = 0
-                output = "[Program Output] "
-                while index < len(words):
-                    if index > 0:
-                        output += words[index] + " "
-                    index += 1
-                print(output)
-            elif command == "create":
-                path = words[1]
-                created_file = open(workspace + path, "w")
-                if len(words) > 2 and words[2] == "with":
-                    index = 3
-                    output = ""
+        if not is_comment(line):
+            words = line.split(" ")
+            if len(words) > 0:
+                command = words[0]
+                if command == "print":
+                    index = 0
+                    output = "[Program Output] "
                     while index < len(words):
-                        output += words[index] + " "
+                        if index > 0:
+                            output += words[index] + " "
                         index += 1
-                    output = remove_escapes(output)
-                    created_file.write(output)
-                created_file.close()
-            elif command == "createdir":
-                path = words[1]
-                if not os.path.exists("{0}{1}".format(workspace, path)):
-                    os.makedirs("{0}{1}".format(workspace, path))
-            elif len(list(string_from_array(words))) > 0:
-                print('[ERROR]: UNKNOWN COMMAND! [Line: {0}]: "{1}"'.format(lineIndex, string_from_array(words)))
+                    print(output)
+                elif command == "create":
+                    path = words[1]
+                    created_file = open(workspace + path, "w")
+                    if len(words) > 2 and words[2] == "with":
+                        index = 3
+                        output = ""
+                        while index < len(words):
+                            output += words[index] + " "
+                            index += 1
+                        output = remove_escapes(output)
+                        created_file.write(output)
+                    created_file.close()
+                elif command == "createdir":
+                    path = words[1]
+                    if not os.path.exists("{0}{1}".format(workspace, path)):
+                        os.makedirs("{0}{1}".format(workspace, path))
+                elif len(list(string_from_array(words))) > 0:
+                    print('[ERROR]: UNKNOWN COMMAND! [Line: {0}]: "{1}"'.format(lineIndex, string_from_array(words)))
         lineIndex += 1
 
-def runNoArg():
+
+def run_no_arg():
+    """
+    runs code without giving any arguments
+    """
     print("Welcome to the Pokey Setup Script Interpreter!")
     print("For easier access to the interpreter, use the command line entry. See github page for details.")
     print("Anyway, where is your setup script located?")
@@ -102,4 +124,4 @@ def runNoArg():
 if len(sys.argv) > 2:
     run(sys.argv[1], sys.argv[2])
 else:
-    runNoArg()
+    run_no_arg()
