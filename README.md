@@ -18,6 +18,7 @@ The syntax of the script is very simple. Each line is a seperate action, and eac
 |`create`|creates a file with content|`create [path relative to workspace] with [text content]`|
 |`createdir`|creates a directory|`createdir [path relative to workspace]`|
 |`print`|print text to the console|`print [text message]`|
+|`variable`|create a variable|`variable [name] [value]`|
 
 ### Example
 
